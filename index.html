@@ -41,7 +41,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
 .glyph{display:block;background:var(--fg);-webkit-mask:var(--m) center/contain no-repeat;mask:var(--m) center/contain no-repeat;transition:background-color .9s var(--ease)}
 
 /* ---------- loader ---------- */
-.loader{position:fixed;inset:0;z-index:100;color:#ECEBE6;animation:loaderFail .01s 9s forwards}
+.loader{position:fixed;inset:0;z-index:100;color:#ECEBE6;background:#121213;animation:loaderFail .01s 9s forwards}
 .loader-cols{position:absolute;inset:0;display:grid;grid-template-columns:var(--gut-l) var(--cols) var(--gut-r)}
 .loader-cols i{background:#121213;margin-right:-1px}
 .loader-ui{position:absolute;inset:0;display:grid;grid-template-rows:auto 1fr auto;
@@ -1566,6 +1566,7 @@ Promise.race([Promise.all([fontsP, texP]), timeout(6000)]).then(async () => {
   const tl = gsap.timeline({ onComplete: () => { killLoader(); introReady = true; lenis && lenis.start(); } });
   if (reduce) { introReady = true; tl.set(loader, { autoAlpha: 0 }); return; }
   const lcols = colsFor($('#loaderCols'));
+  loader.style.background = 'transparent';
   wmSpans.forEach((s, i) => s.setAttribute('y', (spanY[i] + wmFS * 0.95).toFixed(2)));
   tl.to('#loaderUi', { opacity: 0, y: -20, duration: 0.5, ease: 'power2.in' })
     .to(lcols, { yPercent: -100, duration: 1.2, ease: 'expo.inOut', stagger: { each: 0.06, from: 'center' } }, 0.3)
