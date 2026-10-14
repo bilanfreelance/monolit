@@ -1393,7 +1393,7 @@ function buildFootGL(terrainTex) {
         vec2 g = abs(fract(vUv * 90. + vec2(0., uTime * .02)) - .5);
         float grid = (1. - smoothstep(0., .04, min(g.x, g.y))) * .25;
         float a = max(l, grid) * smoothstep(34., 4., vDist) * smoothstep(.5, 3., vDist);
-        a *= .55 + vH * .35;
+        a *= (.55 + vH * .35) * .42;
         gl_FragColor = vec4(uColor * a, a);
       }`
   });
@@ -1411,7 +1411,7 @@ function buildFootGL(terrainTex) {
   buildFootGL.setTex = setTex;
 }
 ScrollTrigger.create({ trigger: '#contact', start: 'top bottom', end: 'bottom top', onToggle: s => { footGLOn = s.isActive; } });
-ScrollTrigger.create({ trigger: '#contact', start: 'top 90%', end: 'top 20%', scrub: true, onUpdate: s => { footFade = s.progress; $('#footGL').style.opacity = (footFade * 0.9).toFixed(3); } });
+ScrollTrigger.create({ trigger: '#contact', start: 'top 90%', end: 'top 20%', scrub: true, onUpdate: s => { footFade = s.progress; $('#footGL').style.opacity = (footFade * 0.75).toFixed(3); } });
 
 /* =========================================================
    10 CONTACT
