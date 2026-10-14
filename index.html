@@ -327,6 +327,15 @@ html.gl-img [data-gl] img{opacity:0}
 .person span{font-size:13px;color:var(--dim)}
 .person p{margin:10px 0 0;font-size:13px;max-width:36ch;color:var(--dim)}
 
+/* 10b doorway */
+#doorway{height:320vh}
+.dw-stage{display:grid;place-items:center}
+.dw-frame{position:relative;width:min(30vw,38vh);aspect-ratio:4/5;overflow:hidden;transform-origin:50% 38%;will-change:transform;clip-path:inset(0 0 0 0)}
+.dw-frame img{width:100%;height:100%;object-fit:cover;display:block}
+.dw-words{position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;padding:0 calc(var(--gut-r) + 8px) 0 calc(var(--gut-l) + 8px);pointer-events:none}
+.dw-words span{font-size:clamp(56px,11vw,190px);letter-spacing:-.055em;line-height:1;will-change:transform}
+.dw-cap{position:absolute;left:0;right:0;bottom:calc(64px + env(safe-area-inset-bottom,0px));text-align:center;color:var(--dim);padding:0 var(--gut-r) 0 var(--gut-l)}
+
 /* 10 contact */
 .foot{padding:22vh var(--gut-r) calc(32px + env(safe-area-inset-bottom,0px)) var(--gut-l);position:relative}
 .cta{display:grid;grid-template-columns:var(--cols);margin-bottom:12vh}
@@ -337,7 +346,7 @@ html.gl-img [data-gl] img{opacity:0}
 .reach{display:grid;grid-template-columns:var(--cols);row-gap:48px;margin-bottom:16vh;align-items:start}
 .door{grid-column:2/3;margin:0 8px 0 8px;aspect-ratio:4/5;overflow:hidden;position:relative}
 .door img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
-.mail{grid-column:3/4;padding-left:8px;display:grid;gap:10px;align-content:start;min-width:0}
+.mail{grid-column:2/4;padding-left:8px;display:grid;gap:10px;align-content:start;min-width:0}
 .mail .mono{color:var(--dim)}
 .mail .addr{font-size:clamp(17px,1.4vw,22px);letter-spacing:-.01em;word-break:break-all;user-select:all}
 .btn{justify-self:start;font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--fg);background:transparent;
@@ -368,6 +377,10 @@ html.gl-img [data-gl] img{opacity:0}
 .foot-mark span{display:inline-block}
 
 /* ---------- phone ---------- */
+@media (max-width:760px){
+  .dw-frame{width:min(58vw,40vh)}
+  .dw-words{flex-direction:column;justify-content:center;gap:52vh}
+}
 @media (max-width:760px){
   :root{--cols:1fr 1fr 1fr 1fr}
   .cols i:nth-child(n+5){display:none}
@@ -427,8 +440,7 @@ html.gl-img [data-gl] img{opacity:0}
   .person.a{grid-column:1/3}
   .person.b{grid-column:3/5}
   .cta .mono,.cta h2{grid-column:1/5}
-  .door{grid-column:1/3;margin-left:0}
-  .mail{grid-column:3/5}
+  .mail{grid-column:1/5;padding-left:0}
   .form{grid-column:1/5;padding-left:0}
   .foot-grid div:nth-child(1),.foot-grid div:nth-child(3){grid-column:1/3}
   .foot-grid div:nth-child(2),.foot-grid div:nth-child(4){grid-column:3/5}
@@ -472,7 +484,7 @@ html.gl-img [data-gl] img{opacity:0}
       <li><a href="#studio"><small>10</small>Studio</a></li>
       <li><a href="#contact"><small>11</small>Contact</a></li>
     </ul>
-    <div class="menu-foot"><span>hello@monolit.studio</span><span>Lutsk · 50.75°N 25.34°E</span></div>
+    <div class="menu-foot"><span>hello@monolit.studio</span><span>New York · 40.71°N 74.01°W</span></div>
   </div>
 </div>
 
@@ -490,7 +502,7 @@ html.gl-img [data-gl] img{opacity:0}
     </svg>
     <h1 class="sr-only">Monolit — architecture, interiors and construction</h1>
     <div class="hero-paper" id="introPaper"></div>
-    <div class="hero-top mono" id="heroTop"><span>Architecture · Interiors · Construction</span><span>Est. 2014 — Lutsk, Ukraine</span></div>
+    <div class="hero-top mono" id="heroTop"><span>Architecture · Interiors · Construction</span><span>Est. 2014 — New York, USA</span></div>
     <div class="badge" id="badge" aria-hidden="true">
       <svg viewBox="0 0 100 100"><defs><path id="circ" d="M50 50 m-40 0 a40 40 0 1 1 80 0 a40 40 0 1 1 -80 0"/></defs>
         <text><textPath href="#circ">Architecture · Interiors · Build · Since 2014 ·</textPath></text></svg>
@@ -799,7 +811,7 @@ html.gl-img [data-gl] img{opacity:0}
     <div class="mono">10 — Studio</div>
     <p class="split" id="studioText">We are architects, interior designers and builders in one practice. The people who draw your house are the people who stand on its site every week.</p>
   </div>
-  <div class="band" data-gl><img src="img/studio.jpg" alt="Empty room with a black lamp and a band of sunlight on the floor" loading="lazy"><span class="cap mono">Studio — Lutsk</span></div>
+  <div class="band" data-gl><img src="img/studio.jpg" alt="Empty room with a black lamp and a band of sunlight on the floor" loading="lazy"><span class="cap mono">Studio — New York</span></div>
   <div class="stats">
     <div class="mono">In numbers</div>
     <div class="stat"><b data-to="12">12</b><span>years of practice</span></div>
@@ -814,13 +826,21 @@ html.gl-img [data-gl] img{opacity:0}
     <div class="person b"><figure data-gl><img src="img/p-founder2.jpg" alt="Portrait of the construction director on a staircase" loading="lazy"></figure><b>Name Surname</b><span>Construction director</span><p>Runs the crews and the workshop. Fifteen years on site, from foundations to joinery.</p></div>
   </div>
 </section>
-</main>
 
+
+<!-- 10b — doorway into contact -->
+<section class="scene" id="doorway" aria-label="Step inside">
+  <div class="stage dw-stage">
+    <div class="dw-words" aria-hidden="true"><span class="dw-l" id="dwL">Step</span><span class="dw-r" id="dwR">inside</span></div>
+    <div class="dw-frame" id="dwFrame"><img src="img/door.jpg" alt="A doorway opening onto a white staircase" id="dwImg"></div>
+    <p class="dw-cap mono" id="dwCap">Every house starts with the first door you open with us</p>
+  </div>
+</section>
+</main>
 <!-- 11 -->
 <footer class="foot" id="contact">
   <div class="cta"><div class="mono">11 — Contact</div><h2 class="chars">Start a project</h2></div>
   <div class="reach">
-    <figure class="door" id="door" data-gl><img src="img/door.jpg" alt="A doorway opening onto a white staircase" loading="lazy"></figure>
     <div class="mail">
       <span class="mono">Write to us</span>
       <span class="addr" id="addr">hello@monolit.studio</span>
@@ -841,7 +861,7 @@ html.gl-img [data-gl] img{opacity:0}
     </form>
   </div>
   <div class="foot-grid">
-    <div><span class="mono">Office</span><span>Street 00, Lutsk</span></div>
+    <div><span class="mono">Office</span><span>Street 00, New York</span></div>
     <div><span class="mono">Social</span><span>Instagram</span></div>
     <div><span class="mono">&nbsp;</span><span>Behance</span></div>
     <div><span class="mono">©</span><span>2026 Monolit</span></div>
@@ -850,7 +870,7 @@ html.gl-img [data-gl] img{opacity:0}
 </footer>
 
 <div class="hud mono" aria-hidden="true"><span id="hudLabel">01 Intro</span><span class="bar"><i id="hudBar"></i></span></div>
-<div class="coords mono" aria-hidden="true">Lutsk · 50.75°N 25.34°E</div>
+<div class="coords mono" aria-hidden="true">New York · 40.71°N 74.01°W</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
@@ -927,6 +947,7 @@ const regions = [
   { el: $('#process'),   label: () => '08 Process',   tone: () => 'light' },
   { el: $('#drawn'),     label: () => '09 Drawn',     tone: () => 'light' },
   { el: $('#studio'),    label: () => '10 Studio',    tone: () => 'light' },
+  { el: $('#doorway'),   label: () => '11 Contact',   tone: () => (doorCovered ? 'dark' : 'light') },
   { el: $('#contact'),   label: () => '11 Contact',   tone: () => 'dark' },
 ];
 const hudLabel = $('#hudLabel'), hudBar = $('#hudBar'), navProg = $('#navProg');
@@ -1306,6 +1327,33 @@ const mWordsList = [['Architecture', 'cube.png'], ['Interiors', 'spiro.png'], ['
 const chunk = mWordsList.map(([w, g]) => `<span>${w}</span><i class="glyph" style="--m:url(g/${g})"></i>`).join('');
 mTrack.innerHTML = chunk + chunk;
 let mx = 0, mDir = 1, mSkew = 0;
+
+/* =========================================================
+   10b DOORWAY — the camera walks into the dark opening of the door
+   ========================================================= */
+const dwFrame = $('#dwFrame'), dwL = $('#dwL'), dwR = $('#dwR'), dwCap = $('#dwCap');
+var doorCovered = false;
+function renderDoor(p) {
+  const W = root.clientWidth, H = innerHeight;
+  const fw = dwFrame.offsetWidth, fh = dwFrame.offsetHeight || 1;
+  // dark opening of the photo: x 28.5–71%, y 26–50% → scale needed to fill the viewport with it (+margin)
+  const sCover = Math.max(W / (0.40 * fw), (H + 2 * 0.12 * fh) / (0.22 * fh)) * 1.15;
+  const reveal = ease3(seg(p, 0, 0.14));
+  dwFrame.style.clipPath = `inset(${(100 * (1 - reveal)).toFixed(2)}% 0 0 0)`;
+  const k = seg(p, 0.18, 0.86);
+  const s = Math.exp(Math.log(sCover) * Math.pow(k, 2.4));
+  dwFrame.style.transform = `scale(${s.toFixed(4)})`;
+  doorCovered = s >= sCover * 0.98;
+  const out = ease3(seg(p, 0.12, 0.5));
+  const vert = innerWidth < 761;
+  dwL.style.transform = vert ? `translate3d(0,${(-out * 40).toFixed(2)}vh,0)` : `translate3d(${(-out * 30).toFixed(2)}vw,0,0)`;
+  dwR.style.transform = vert ? `translate3d(0,${(out * 40).toFixed(2)}vh,0)` : `translate3d(${(out * 30).toFixed(2)}vw,0,0)`;
+  const wo = (ease3(seg(p, 0.04, 0.16)) * (1 - seg(p, 0.35, 0.55))).toFixed(3);
+  dwL.style.opacity = wo; dwR.style.opacity = wo;
+  dwCap.style.opacity = (seg(p, 0.06, 0.16) * (1 - seg(p, 0.25, 0.4))).toFixed(3);
+}
+ScrollTrigger.create({ trigger: '#doorway', start: 'top 45%', end: 'bottom bottom', onUpdate: s => renderDoor(s.progress), onRefresh: s => renderDoor(s.progress) });
+renderDoor(0);
 
 /* =========================================================
    10 CONTACT
