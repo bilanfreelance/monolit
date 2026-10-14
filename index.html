@@ -388,10 +388,13 @@ html.gl-img [data-gl] img{opacity:0}
   #ovA h3,#ovB h3{grid-column:1/5;text-align:left}
   #ovA p,#ovB p{grid-column:2/5;align-self:end;margin:0 0 16vh}
   #ovB p{grid-row:auto}
-  .wire{grid-column:1/5;width:80vw;align-self:start;margin-top:14vh}
-  #ovC h3,#ovC p,#ovC .mono{grid-column:1/5}
-  #ovC h3{align-self:end;margin-bottom:26vh}
-  #ovC p{margin-bottom:12vh}
+  .wire-wrap{align-items:start}
+  .wire{grid-column:1/5;width:min(72vw,300px);max-height:34vh;align-self:start;margin-top:calc(70px + 4vh)}
+  #ovC{grid-template-rows:1fr auto auto auto;align-items:end;padding-bottom:calc(64px + env(safe-area-inset-bottom,0px))}
+  #ovC h3,#ovC p,#ovC .mono{grid-column:1/5;margin:0;align-self:end}
+  #ovC .mono{grid-row:2;margin-bottom:12px}
+  #ovC h3{grid-row:3;font-size:clamp(40px,12vw,64px);margin-bottom:16px}
+  #ovC p{grid-row:4}
   .sec-head h2{grid-column:1/5}
   .sec-head .mono{grid-column:1/5;margin-bottom:14px}
   .sec-head .count{grid-column:1/5;margin-top:12px}
@@ -966,7 +969,7 @@ function layoutHero() {
   wmFS = 100 * (W - gl - gr) / (len || 1) * 0.995;
   wmText.setAttribute('font-size', wmFS.toFixed(2));
   const bb = wmText.getBBox();
-  const cap = wmFS * 0.72, lineH = wmFS * 0.82;
+  const cap = wmFS * 0.72, lineH = wmFS * 0.9;
   const x0 = (gl - bb.x).toFixed(2);
   wmText.setAttribute('x', x0);
   if (twoLines) {
@@ -1325,6 +1328,19 @@ const fmSpans = $$('#footMark span');
 let footP = 0, footOn = false;
 ScrollTrigger.create({ trigger: '#footMark', start: 'top bottom', end: 'bottom bottom', onUpdate: s => { footP = s.progress; }, onToggle: s => { footOn = s.isActive || s.progress > 0; } });
 const footMark = $('#footMark');
+function fitFoot() {
+  footMark.style.fontSize = '100px';
+  const prevV = footMark.style.fontVariationSettings;
+  footMark.style.fontVariationSettings = '"wdth" 125';
+  footMark.style.justifyContent = 'flex-start';
+  const w = fmSpans.reduce((a, s) => a + s.getBoundingClientRect().width, 0);
+  const avail = footMark.clientWidth;
+  footMark.style.fontSize = Math.min(280, 100 * avail / (w * 1.04)).toFixed(2) + 'px';
+  footMark.style.justifyContent = '';
+  footMark.style.fontVariationSettings = prevV;
+}
+fitFoot();
+if (document.fonts) document.fonts.ready.then(fitFoot);
 gsap.fromTo(fmSpans, { yPercent: 100 }, { yPercent: 0, ease: 'none', scrollTrigger: { trigger: '#footMark', start: 'top bottom', end: 'bottom bottom', scrub: true } });
 
 /* =========================================================
@@ -1551,7 +1567,7 @@ gsap.ticker.add((time, dt) => {
   if (sActive) renderCells(time);
 });
 
-addEventListener('resize', () => { mobile = innerWidth < 760; measurePrev(); resizeGL(); imgGL && imgGL.resize(); layoutHero(); renderIntro(); ScrollTrigger.refresh(); });
+addEventListener('resize', () => { mobile = innerWidth < 760; measurePrev(); fitFoot(); resizeGL(); imgGL && imgGL.resize(); layoutHero(); renderIntro(); ScrollTrigger.refresh(); });
 
 /* =========================================================
    PRELOAD -> INTRO
