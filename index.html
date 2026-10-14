@@ -1699,7 +1699,12 @@ const critical = ['img/skylight.webp', 'img/facade.webp', 'img/stair.webp', 'img
 let done = 0;
 const bump = () => { done++; target = Math.min(96, (done / (critical.length + 1)) * 100); };
 const timeout = ms => new Promise(r => setTimeout(r, ms));
-const fontsP = (document.fonts ? document.fonts.ready : Promise.resolve()).then(bump);
+// SVG text inside a <mask> does not trigger webfont loading by itself, so request the faces explicitly;
+// otherwise MONOLIT is measured with a fallback font and overflows once Archivo arrives
+const fontsP = (document.fonts
+  ? Promise.all([document.fonts.load('850 100px Archivo'), document.fonts.load('400 16px "Hanken Grotesk"'), document.fonts.ready]).catch(() => {})
+  : Promise.resolve()).then(bump);
+if (document.fonts) document.fonts.addEventListener('loadingdone', () => { try { layoutHero(); fitFoot(); renderIntro(); } catch (_) {} });
 const texP = Promise.all([
   loadTex('img/facade.webp').then(t => (bump(), t)),
   loadTex('img/stair.webp').then(t => (bump(), t)),
