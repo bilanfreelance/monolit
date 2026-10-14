@@ -30,6 +30,10 @@ html.lenis,html.lenis body{height:auto}
 .lenis.lenis-smooth{scroll-behavior:auto!important}
 .lenis.lenis-stopped{overflow:hidden}
 *{box-sizing:border-box}
+html{scrollbar-gutter:stable;scrollbar-width:thin;scrollbar-color:var(--dim) var(--bg)}
+html::-webkit-scrollbar{width:8px}
+html::-webkit-scrollbar-track{background:var(--bg)}
+html::-webkit-scrollbar-thumb{background:var(--dim);border-radius:8px;border:2px solid var(--bg)}
 body{margin:0}
 body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.5;
   transition:background-color .9s var(--ease),color .9s var(--ease);overflow-x:clip;-webkit-font-smoothing:antialiased}
@@ -117,6 +121,7 @@ html.gl-img [data-gl] img{opacity:0}
 #intro .stage{background:#ECEBE6}
 .hero-img{position:absolute;inset:0;background:#121213;overflow:hidden}
 .hero-img img{width:100%;height:100%;object-fit:cover;transform:translate3d(var(--tx,0px),var(--ty,0px),0) scale(var(--s,1));will-change:transform}
+.hero-tint{position:absolute;inset:0;background:#ECEBE6;mix-blend-mode:multiply;pointer-events:none}
 .hero-shade{position:absolute;inset:0;background:#121213;opacity:.46;pointer-events:none}
 .hero-mask{position:absolute;inset:0;width:100%;height:100%;z-index:2;display:block}
 #wmPaper{fill:#ECEBE6}
@@ -159,6 +164,11 @@ html.gl-img [data-gl] img{opacity:0}
 .manifesto h2{margin:0;font-weight:400;font-size:clamp(44px,8.6vw,140px);line-height:.98;letter-spacing:-.05em;will-change:transform}
 .manifesto h2:nth-child(2){padding-left:1.4em}
 .manifesto .w{display:inline-block}
+.manifesto h2{white-space:nowrap}
+.chip{display:inline-block;position:relative;height:.74em;width:0;margin-right:0;vertical-align:-.02em;overflow:hidden;border-radius:.06em}
+.chip img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(1.5)}
+.m-eyebrow{position:absolute;left:0;right:0;top:calc(72px + env(safe-area-inset-top,0px));display:flex;justify-content:space-between;
+  padding-left:calc(var(--gut-l) + 8px);padding-right:calc(var(--gut-r) + 8px);color:var(--dim)}
 .field-note{position:absolute;z-index:3;left:0;right:0;bottom:12vh;display:grid;grid-template-columns:var(--cols);padding-left:var(--gut-l);padding-right:var(--gut-r);pointer-events:none}
 .field-note p{grid-column:5/7;margin:0;padding-left:8px;max-width:30ch;font-size:13px;color:#ECEBE6;opacity:0}
 
@@ -255,7 +265,8 @@ html.gl-img [data-gl] img{opacity:0}
   padding-top:calc(48px + env(safe-area-inset-top,0px))}
 .proc-num{grid-column:1/3;padding-left:8px;font-family:var(--f-display);font-weight:800;font-variation-settings:"wdth" 66;
   font-size:clamp(110px,20vw,340px);line-height:1;height:1em;overflow:hidden;display:flex;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
-.proc-num .rl{display:flex;flex-direction:column;will-change:transform}
+.proc-num{align-items:flex-start}
+.proc-num .rl{display:flex;flex-direction:column;flex:none;height:5em;will-change:transform}
 .proc-num .rl span{height:1em;display:block}
 .proc-plan{grid-column:3/6;padding:0 3vw;min-width:0;position:relative}
 .proc-plan svg{width:100%;height:auto;max-height:66vh;display:block;color:var(--fg)}
@@ -467,6 +478,7 @@ html.gl-img [data-gl] img{opacity:0}
 <section class="scene" id="intro">
   <div class="stage">
     <div class="hero-img" id="heroImg"><img src="img/skylight.jpg" alt="" width="1080" height="1618"></div>
+    <div class="hero-tint" aria-hidden="true"></div>
     <div class="hero-shade" id="heroShade"></div>
     <svg class="hero-mask" id="heroMask" aria-hidden="true" preserveAspectRatio="none">
       <defs><mask id="wmMask" maskUnits="userSpaceOnUse"><rect id="wmRect" fill="#fff" x="0" y="0" width="100" height="100"/>
@@ -493,9 +505,10 @@ html.gl-img [data-gl] img{opacity:0}
   <div class="stage">
     <canvas id="fieldCanvas" aria-hidden="true"></canvas>
     <div class="manifesto">
-      <h2 class="split">Mass Shapes</h2>
-      <h2 class="split">Light and</h2>
-      <h2 class="split">Silence</h2>
+      <div class="m-eyebrow mono"><span>02 — Manifest</span><span>Three words we build with</span></div>
+      <h2><span class="w">Mass</span> <span class="chip"><img src="img/m-concrete.jpg" alt=""></span><span class="w">Shapes</span></h2>
+      <h2><span class="w">Light</span> <span class="chip"><img src="img/shadow.jpg" alt=""></span><span class="w">and</span></h2>
+      <h2><span class="chip"><img src="img/stair.jpg" alt=""></span><span class="w">Silence</span></h2>
     </div>
     <div class="field-note"><p id="fieldNote">Every project starts as a list of words. Mass, grain, span, rhythm. Then we turn them into walls.</p></div>
   </div>
@@ -942,7 +955,7 @@ const navEl = $('.nav');
 const O = { x: 0, y: 0 }; let spanY = []; let wmBase = 0, wmFS = 100, introP = 0, introOn = true;
 const hp = { tx: 0, ty: 0 };
 function layoutHero() {
-  const W = innerWidth, H = innerHeight;
+  const W = root.clientWidth, H = innerHeight;
   const gl = parseFloat(getComputedStyle(navEl).paddingLeft) || 16, gr = parseFloat(getComputedStyle(navEl).paddingRight) || 16;
   heroSvg.setAttribute('viewBox', `0 0 ${W} ${H}`);
   for (const r of [wmRect, wmPaper]) { r.setAttribute('width', W); r.setAttribute('height', H); }
@@ -969,6 +982,20 @@ function layoutHero() {
   wmSpans.forEach((s, i) => s.setAttribute('y', spanY[i].toFixed(2)));
   const e = wmText.getExtentOfChar(3);
   O.x = e.x + e.width * 0.17; O.y = wmBase - cap * 0.5;
+  // find the exact middle of the O's left stroke so the zoom always lands inside solid ink
+  try {
+    const c = document.createElement('canvas'), x = c.getContext('2d');
+    const fs = Math.round(wmFS); c.width = Math.ceil(fs * 1.4); c.height = Math.ceil(fs * 1.3);
+    x.font = `850 ${fs}px Archivo, "Helvetica Neue", Arial, sans-serif`;
+    if ('fontStretch' in x) x.fontStretch = 'semi-expanded';
+    x.fillStyle = '#000'; x.textBaseline = 'alphabetic';
+    const base = Math.round(fs * 1.1); x.fillText('O', 0, base);
+    const row = Math.round(base - x.measureText('O').actualBoundingBoxAscent / 2);
+    const d = x.getImageData(0, row, c.width, 1).data;
+    let a = -1, b = -1;
+    for (let i = 0; i < c.width; i++) { const on = d[i * 4 + 3] > 128; if (on && a < 0) a = i; if (!on && a >= 0) { b = i; break; } }
+    if (a >= 0 && b > a) { O.x = e.x + (a + b) / 2; O.y = wmBase - (base - row); }
+  } catch (_) {}
 }
 let introReady = false;
 function renderIntro() {
@@ -978,16 +1005,16 @@ function renderIntro() {
   const fly = Math.pow(k, 2.2);
   const s = Math.exp(Math.log(160) * fly);
   wmG.setAttribute('transform', `translate(${O.x} ${O.y}) scale(${s.toFixed(4)}) translate(${-O.x} ${-O.y})`);
-  heroSvg.style.opacity = (1 - seg(p, 0.45, 0.5)).toFixed(3);
+  heroSvg.style.opacity = (1 - seg(s, 70, 150)).toFixed(3);
   const s0 = mobile ? 0.9 : 0.62;
   const grow = ease3(seg(p, 0.05, 0.5));
-  const dive = seg(p, 0.55, 0.94), dz = dive * dive;
-  introImgEl.style.setProperty('--s', ((s0 + (1 - s0) * grow) * (1 + dz * 7.5)).toFixed(4));
+  const dive = seg(p, 0.52, 0.97), dz = ease3(dive);
+  introImgEl.style.setProperty('--s', ((s0 + (1 - s0) * grow) * (1 + dz * 4.2)).toFixed(4));
   const par = 1 - grow;
   introImgEl.style.setProperty('--tx', (hp.tx * par).toFixed(1) + 'px');
   introImgEl.style.setProperty('--ty', (hp.ty * par).toFixed(1) + 'px');
   heroShade.style.opacity = (0.46 * (1 - ease3(seg(p, 0.2, 0.5)))).toFixed(3);
-  introPaper.style.opacity = seg(p, 0.82, 0.97).toFixed(3);
+  introPaper.style.opacity = ease3(seg(p, 0.7, 0.97)).toFixed(3);
   const f = (1 - seg(p, 0, 0.1)).toFixed(3);
   introMeta.style.opacity = f; heroTop.style.opacity = f; badge.style.opacity = (1 - seg(p, 0.02, 0.14)).toFixed(3);
 }
@@ -999,13 +1026,16 @@ let badgeRot = 0;
    02-03 MANIFESTO -> 3D WORD FIELD
    ========================================================= */
 const field = $('#field'), fCanvas = $('#fieldCanvas');
-const mLines = $$('.manifesto h2'), mWords = $$('.manifesto .w');
+const mLines = $$('.manifesto h2'), mWords = $$('.manifesto .w'), mChips = $$('.manifesto .chip');
 gsap.set(fCanvas, { opacity: 0 });
 const mtl = gsap.timeline({ scrollTrigger: { trigger: field, start: 'top top', end: 'bottom bottom', scrub: 0.6 } });
 mtl.fromTo(mWords, { opacity: 0.08 }, { opacity: 1, stagger: 0.025, duration: 0.1, ease: 'none' }, 0.02)
    .fromTo(mLines[0], { xPercent: -16 }, { xPercent: 0, duration: 0.26, ease: 'power2.out' }, 0)
    .fromTo(mLines[1], { xPercent: 20 }, { xPercent: 0, duration: 0.26, ease: 'power2.out' }, 0)
    .fromTo(mLines[2], { xPercent: -9 }, { xPercent: 0, duration: 0.26, ease: 'power2.out' }, 0)
+   .fromTo(mChips, { width: 0, marginRight: 0 }, { width: '1.7em', marginRight: '.24em', stagger: 0.05, duration: 0.12, ease: 'power3.inOut' }, 0.08)
+   .fromTo(mChips.map(c => c.firstElementChild), { scale: 1.6 }, { scale: 1, stagger: 0.05, duration: 0.18, ease: 'power2.out' }, 0.08)
+   .to('.m-eyebrow', { opacity: 0, duration: 0.04 }, 0.3)
    .to(mLines, { scale: 0.8, opacity: 0, filter: 'blur(6px)', duration: 0.08, stagger: 0.012, ease: 'power2.in' }, 0.33)
    .to(fCanvas, { opacity: 1, duration: 0.07, ease: 'none' }, 0.31)
    .fromTo('#fieldNote', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.06 }, 0.55)
@@ -1166,7 +1196,7 @@ function buildGL(tex) {
     if (terrain && !tex.terrain) { tex.terrain = terrain; addTerrain(terrain); }
   };
   resizeGL = () => {
-    const w = innerWidth, h = innerHeight;
+    const w = root.clientWidth, h = innerHeight;
     fr.setSize(w, h, false); fCam.aspect = w / h; fCam.updateProjectionMatrix();
     cr.setSize(w, h, false); uni.uRes.value.set(w, h);
   };
@@ -1294,8 +1324,8 @@ $('#form').addEventListener('submit', e => {
 const fmSpans = $$('#footMark span');
 let footP = 0, footOn = false;
 ScrollTrigger.create({ trigger: '#footMark', start: 'top bottom', end: 'bottom bottom', onUpdate: s => { footP = s.progress; }, onToggle: s => { footOn = s.isActive || s.progress > 0; } });
-const fmW = fmSpans.map(() => 850);
-gsap.fromTo(fmSpans, { yPercent: 100 }, { yPercent: 0, stagger: 0.04, ease: 'none', scrollTrigger: { trigger: '#footMark', start: 'top bottom', end: 'bottom bottom', scrub: true } });
+const footMark = $('#footMark');
+gsap.fromTo(fmSpans, { yPercent: 100 }, { yPercent: 0, ease: 'none', scrollTrigger: { trigger: '#footMark', start: 'top bottom', end: 'bottom bottom', scrub: true } });
 
 /* =========================================================
    IMAGE SYSTEM — WebGL planes on desktop, CSS reveals on touch
@@ -1372,7 +1402,7 @@ function buildImageGL() {
     return it;
   });
   let W = 1, H = 1, cleared = true;
-  const resize = () => { W = innerWidth; H = innerHeight; r.setSize(W, H, false);
+  const resize = () => { W = root.clientWidth; H = innerHeight; r.setSize(W, H, false);
     cam.left = -W / 2; cam.right = W / 2; cam.top = H / 2; cam.bottom = -H / 2; cam.updateProjectionMatrix(); };
   resize();
   const render = (time, vel) => {
@@ -1514,13 +1544,7 @@ gsap.ticker.add((time, dt) => {
   baKnob.setAttribute('aria-valuenow', Math.round(baX * 100));
   // footer letters breathe toward the cursor
   if (footOn) {
-    const wd = 62 + 63 * footP;
-    fmSpans.forEach((s, i) => {
-      let tg = 850;
-      if (fine) { const b = s.getBoundingClientRect(); const dx = Math.abs(mouse.x - (b.left + b.width / 2)) / innerWidth; tg = 250 + 600 * Math.min(1, dx / 0.22); if (mouse.y < b.top - innerHeight * 0.4) tg = 850; }
-      fmW[i] += (tg - fmW[i]) * 0.1;
-      s.style.fontVariationSettings = `"wdth" ${wd.toFixed(1)}, "wght" ${fmW[i].toFixed(0)}`;
-    });
+    footMark.style.fontVariationSettings = `"wdth" ${(62 + 63 * footP).toFixed(1)}`;
   }
   // webgl
   if (fActive) renderField(time);
