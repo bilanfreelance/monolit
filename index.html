@@ -841,7 +841,6 @@ html.gl-img [data-gl] img{opacity:0}
 </main>
 <!-- 11 -->
 <footer class="foot" id="contact">
-  <canvas class="foot-gl" id="footGL" aria-hidden="true"></canvas>
   <div class="cta"><div class="mono">11 — Contact</div><h2 class="chars">Start a project</h2></div>
   <div class="reach">
     <div class="mail">
@@ -1411,7 +1410,6 @@ function buildFootGL(terrainTex) {
   buildFootGL.setTex = setTex;
 }
 ScrollTrigger.create({ trigger: '#contact', start: 'top bottom', end: 'bottom top', onToggle: s => { footGLOn = s.isActive; } });
-ScrollTrigger.create({ trigger: '#contact', start: 'top 90%', end: 'top 20%', scrub: true, onUpdate: s => { footFade = s.progress; $('#footGL').style.opacity = (footFade * 0.75).toFixed(3); } });
 
 /* =========================================================
    10 CONTACT
@@ -1712,11 +1710,10 @@ Promise.race([Promise.all([fontsP, texP]), timeout(6000)]).then(async () => {
   let tex = {};
   try { const [facade, stair, terrain] = await Promise.race([texP, timeout(10)]) || []; tex = { facade, stair, terrain }; } catch (e) {}
   try { buildGL(tex); } catch (e) { console.warn('WebGL disabled', e); }
-  try { buildFootGL(tex.terrain); } catch (e) { console.warn('Footer GL disabled', e); }
   try { imgGL = buildImageGL(); } catch (e) { console.warn('Image GL disabled', e); imgGL = null; root.classList.remove('gl-img'); }
   if (!imgGL) revealDOM();
   layoutHero();
-  texP.then(([a, b, c]) => { setTex(a, b, c); buildFootGL.setTex && buildFootGL.setTex(c); });
+  texP.then(([a, b, c]) => { setTex(a, b, c);  });
   target = 100;
   await timeout(reduce ? 0 : 450);
   gsap.ticker.remove(tick); numEl.textContent = '100'; barEl.style.transform = 'scaleX(1)';
