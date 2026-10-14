@@ -1416,7 +1416,17 @@ ScrollTrigger.create({ trigger: '#contact', start: 'top 90%', end: 'top 20%', sc
 /* =========================================================
    10 CONTACT
    ========================================================= */
-gsap.from('.cta .c', { yPercent: 108, stagger: 0.025, duration: 1.1, ease: 'expo.out', scrollTrigger: { trigger: '.cta', start: 'top 78%' } });
+// title reveal driven by IntersectionObserver so it can't be skipped by pinned scenes above it
+{
+  const ctaChars = $$('.cta .c'), cta = $('.cta');
+  if (!reduce && 'IntersectionObserver' in window) {
+    gsap.set(ctaChars, { yPercent: 108 });
+    const io = new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting) { gsap.to(ctaChars, { yPercent: 0, stagger: 0.025, duration: 1.1, ease: 'expo.out', overwrite: true }); io.disconnect(); }
+    }), { threshold: 0.15 });
+    io.observe(cta);
+  }
+}
 const copyBtn = $('#copyBtn'), addr = $('#addr');
 copyBtn.addEventListener('click', () => {
   const done = msg => { copyBtn.textContent = msg; setTimeout(() => copyBtn.textContent = 'Copy address', 1800); };
