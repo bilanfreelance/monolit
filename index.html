@@ -1340,10 +1340,12 @@ function renderDoor(p) {
   const sCover = Math.max(W / (0.40 * fw), (H + 2 * 0.12 * fh) / (0.22 * fh)) * 1.15;
   const reveal = ease3(seg(p, 0, 0.14));
   dwFrame.style.clipPath = `inset(${(100 * (1 - reveal)).toFixed(2)}% 0 0 0)`;
-  const k = seg(p, 0.18, 0.86);
+  const k = seg(p, 0.16, 0.78);
   const s = Math.exp(Math.log(sCover) * Math.pow(k, 2.4));
   dwFrame.style.transform = `scale(${s.toFixed(4)})`;
   doorCovered = s >= sCover * 0.98;
+  // once the dark opening fills the screen, dissolve it into the footer's ink + grid so there is no seam
+  dwFrame.style.opacity = (1 - ease3(seg(p, 0.8, 0.97))).toFixed(3);
   const out = ease3(seg(p, 0.12, 0.5));
   const vert = innerWidth < 761;
   dwL.style.transform = vert ? `translate3d(0,${(-out * 40).toFixed(2)}vh,0)` : `translate3d(${(-out * 30).toFixed(2)}vw,0,0)`;
